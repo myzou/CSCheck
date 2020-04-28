@@ -12,7 +12,7 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd  
         http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd  
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">    
-  
+
     <!-- 自动加载构建bean -->
     <context:component-scan base-package="com.*" />
 
@@ -20,9 +20,20 @@
     <bean id="csAutoCheckDetail"
           class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <!-- 调用的类 -->
-        <property name="targetObject" ref="startWorkJob" />
+        <property name="targetObject" ref="CSAutoJob" />
         <!-- 调用类中的方法 -->
         <property name="targetMethod" value="csAutoCheck" />
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <!-- 定义调用对象和调用对象的方法 -->
+    <bean id="autoCheckPingDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject" ref="AutoCheckPingByHill" />
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod" value="autoCheckPing" />
         <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
         <property name="concurrent" value="false"/>
     </bean>
@@ -35,9 +46,16 @@
             <ref bean="csAutoCheckDetail" />
         </property>
         <property name="cronExpression">
-            <value>0 0/6 * * * ? </value>
-
-
+            <value>0/20 * * * * ?</value>
+<!--            <value>0 0/6 * * * ? </value>-->
+        </property>
+    </bean>
+    <bean id="autoCheckPingTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="autoCheckPingDetail"/>
+        <property name="cronExpression">
+<!--            <value>0/20 * * * * ?</value>-->
+            <value>0 0 11,16,19,22 * * ? </value>
         </property>
     </bean>
 
@@ -46,7 +64,8 @@
     <bean name="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
-                 <ref bean="csAutoCheckJobTrigger" />
+<!--                 <ref bean="csAutoCheckJobTrigger" />-->
+                <ref bean="autoCheckPingTrigger" />
             </list>
         </property>
     </bean>

@@ -34,7 +34,7 @@ public class FlappingManage extends Thread {
             paramMap.put("interfaceName", interfaceName);
             paramMap.put("pe", pe);
             paramMap.put("vrf", vrf);
-            log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:ÉÁ¶Ï \t"+ GetResults.flappingDispose(paramMap,caseId,connTotal));
+            log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:é—ªæ–­ \t"+ GetResults.flappingDispose(paramMap,caseId,connTotal));
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,7 +1,7 @@
 package com.cter.AutoCheck;
 
 /**
- * remedy Ìá¹©µÄ¶ÔÓ¦case µÄViewÊµÌåÀà
+ * remedy æä¾›çš„å¯¹åº”case çš„Viewå®ä½“ç±»
  */
 public class CaseView {
 
@@ -14,13 +14,13 @@ public class CaseView {
     private String peWanIp;
     private String siteId;
     private String status;
-    private String destinationIp;//¶Ô¶Ëip
-    private String sourceIp;//×ÊÔ´ip,jasonËµÁô×Å±¸ÓÃ
+    private String destinationIp;//å¯¹ç«¯ip
+    private String sourceIp;//èµ„æºip,jasonè¯´ç•™ç€å¤‡ç”¨
     private String trunkName;
-    private String siteNum;//±à¼­ÊÇsite1 »¹ÊÇ site2
-    private String webService;//Ò³ÃæÏÔÊ¾µÄservice
-    private String webType;//½çÃæÏÔÊ¾µÄÀàĞÍ
-    private String webItem;//½çÃæÏÔÊ¾µÄItem
+    private String siteNum;//ç¼–è¾‘æ˜¯site1 è¿˜æ˜¯ site2
+    private String webService;//é¡µé¢æ˜¾ç¤ºçš„service
+    private String webType;//ç•Œé¢æ˜¾ç¤ºçš„ç±»å‹
+    private String webItem;//ç•Œé¢æ˜¾ç¤ºçš„Item
 
 
 

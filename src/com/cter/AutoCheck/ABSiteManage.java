@@ -47,7 +47,7 @@ public class ABSiteManage extends  Thread{
             paramMap.put("vrf2", vrf2);
             paramMap.put("peWan2", pewan2);
             System.out.print(DateUtil.now() +"\t");
-            log.info(DateUtil.now() +"\t"+"case:"+caseId+"\ttype:ab¶ª°ü"+"\t"+ GetResults.abPacketLossDispose(paramMap,caseId,connTotal));
+            log.info(DateUtil.now() +"\t"+"case:"+caseId+"\ttype:abä¸¢åŒ…"+"\t"+ GetResults.abPacketLossDispose(paramMap,caseId,connTotal));
         } catch (Exception e) {
             e.printStackTrace();
         }

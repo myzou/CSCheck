@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.util.*;
 
 /**
- * µ÷ÓÃ ½Ó¿Ú»ñÈ¡½á¹û¼¯
+ * è°ƒç”¨ æ¥å£è·å–ç»“æœé›†
  */
 public class GetResults {
 
@@ -24,11 +24,11 @@ public class GetResults {
     //    static String url = "http://10.180.5.189:8089";
     static String url = "http://10.181.160.4:8089";
 
-    //ÓÃÓÚ¼ÇÂ¼ÕıÔÚÖ´ĞĞµÄ caseID Map
+    //ç”¨äºè®°å½•æ­£åœ¨æ‰§è¡Œçš„ caseID Map
     public static HashMap<String, String> caseIdMap = new HashMap<>();
 
     /**
-     * ¹Ç¸É»ñÈ¡½á¹û
+     * éª¨å¹²è·å–ç»“æœ
      *
      * @param trunkName
      * @return
@@ -43,7 +43,7 @@ public class GetResults {
     }
 
     /**
-     * ÉÁ¶ÏÎÊÌâ
+     * é—ªæ–­é—®é¢˜
      *
      * @param map
      * @return
@@ -57,7 +57,7 @@ public class GetResults {
     }
 
     /**
-     * µ¥Ïß¶ª°üÎÊÌâ
+     * å•çº¿ä¸¢åŒ…é—®é¢˜
      *
      * @param map
      * @return
@@ -72,7 +72,7 @@ public class GetResults {
 
 
     /**
-     * µ¥Ïß¶ª°ü ¶Ô¶Ë
+     * å•çº¿ä¸¢åŒ… å¯¹ç«¯
      * ab_loss_internet
      *
      * @param map
@@ -87,7 +87,7 @@ public class GetResults {
     }
 
     /**
-     * AB¶ª°üÎÊÌâ
+     * ABä¸¢åŒ…é—®é¢˜
      *
      * @param map
      * @return
@@ -102,10 +102,10 @@ public class GetResults {
     }
 
     /**
-     * ²åÈëµ½workLog
+     * æ’å…¥åˆ°workLog
      *
-     * @param results ½á¹û
-     * @param caseId  case±àºÅ
+     * @param results ç»“æœ
+     * @param caseId  caseç¼–å·
      * @return
      */
     public static int insertWorkLog(String results, String caseId, Connection conn) {
@@ -117,14 +117,14 @@ public class GetResults {
         if (results.equals("Work Log")){
             summary=results;
             caseIdLog.info("caseId  (" + caseId + ") " + results);
-        } else if (results.indexOf("Îª¿Õ") > -1 || summary.equals("²ÎÊıÎª¿Õ")) {
+        } else if (results.indexOf("ä¸ºç©º") > -1 || summary.equals("å‚æ•°ä¸ºç©º")) {
             summary = results;
             caseIdLog.info("caseId  (" + caseId + ") " + results);
         } else if (results.indexOf("GGWAPI cannot connect") > -1) {
-            summary = "ggwAPI Á¬½ÓÒì³££¬ÎŞ·¨½øĞĞ×Ô¶¯²éÑ¯ ÏßÂ·×´Ì¬";
-            results = "ggwAPI Á¬½ÓÒì³££¬ÎŞ·¨½øĞĞ×Ô¶¯²éÑ¯ ÏßÂ·×´Ì¬";
-            caseIdLog.info("caseId  (" + caseId + ")  ²éÑ¯·µ»ØÎª¿Õ Òì³£");
-        } else if (summary.equals("×Ô¶¯²éÑ¯ ÏßÂ·×´Ì¬ ggwAPI ·µ»Ø²ÎÊıÒì³££¬Çë¼ì²éÁªÏµ¿ª·¢ÈËÔ±¼ì²é²ÎÊı ")) {
+            summary = "ggwAPI è¿æ¥å¼‚å¸¸ï¼Œæ— æ³•è¿›è¡Œè‡ªåŠ¨æŸ¥è¯¢ çº¿è·¯çŠ¶æ€";
+            results = "ggwAPI è¿æ¥å¼‚å¸¸ï¼Œæ— æ³•è¿›è¡Œè‡ªåŠ¨æŸ¥è¯¢ çº¿è·¯çŠ¶æ€";
+            caseIdLog.info("caseId  (" + caseId + ")  æŸ¥è¯¢è¿”å›ä¸ºç©º å¼‚å¸¸");
+        } else if (summary.equals("è‡ªåŠ¨æŸ¥è¯¢ çº¿è·¯çŠ¶æ€ ggwAPI è¿”å›å‚æ•°å¼‚å¸¸ï¼Œè¯·æ£€æŸ¥è”ç³»å¼€å‘äººå‘˜æ£€æŸ¥å‚æ•° ")) {
             results = summary;
             caseIdLog.info("caseId  (" + caseId + ") " + results);
         }
@@ -143,7 +143,7 @@ public class GetResults {
     }
 
     /**
-     * ¸ù¾İ¹Ç¸ÉÃû³ÆºÍ caseId ¸üĞÂÊı¾İ¿â
+     * æ ¹æ®éª¨å¹²åç§°å’Œ caseId æ›´æ–°æ•°æ®åº“
      *
      * @param trunkName
      * @param caseId
@@ -195,7 +195,7 @@ public class GetResults {
     }
 
     /**
-     * ¸ù¾İÉÁ¶ÏĞÅÏ¢ ºÍ caseId ¸üĞÂÊı¾İ¿â
+     * æ ¹æ®é—ªæ–­ä¿¡æ¯ å’Œ caseId æ›´æ–°æ•°æ®åº“
      *
      * @param caseId
      * @return
@@ -205,8 +205,8 @@ public class GetResults {
         String interfaceName = paramMap.get("interfaceName");
         String pe = paramMap.get("pe");
         String vrf = paramMap.get("vrf");
-        if (StrUtil.isBlank(interfaceName) || StrUtil.isBlank(pe) || StrUtil.isBlank(vrf)) {
-            results = "¸ù¾İÏßÂ·site_id ²éÑ¯µÄ interface£¬pe,vrf ÓĞÒ»Ïî»òÕß¶àÏîÎª¿Õ";
+        if (StrUtil.isBlank(interfaceName) || StrUtil.isBlank(pe) ) {
+            results = "æ ¹æ®çº¿è·¯site_id æŸ¥è¯¢çš„ interfaceï¼Œpeæœ‰ä¸€é¡¹æˆ–è€…å¤šé¡¹ä¸ºç©º";
             Connection conn = OracleDbUtil.getRemedyProConnection();
             int i = insertWorkLog(results, caseId, conn);
             OracleDbUtil.closeConnection(conn);
@@ -246,7 +246,7 @@ public class GetResults {
     }
 
     /**
-     * ¸ù¾İ¶ª°ü µ¥Ïß ºÍ caseId ¸üĞÂÊı¾İ¿â
+     * æ ¹æ®ä¸¢åŒ… å•çº¿ å’Œ caseId æ›´æ–°æ•°æ®åº“
      *
      * @param caseId
      * @return
@@ -256,8 +256,8 @@ public class GetResults {
         String interfaceName = paramMap.get("interfaceName");
         String pe = paramMap.get("pe");
         String vrf = paramMap.get("vrf");
-        if (StrUtil.isBlank(interfaceName) || StrUtil.isBlank(pe) || StrUtil.isBlank(vrf)) {
-            results = "¸ù¾İÏßÂ·site_id ²éÑ¯µÄ interface£¬pe,vrf ÓĞÒ»Ïî»òÕß¶àÏîÎª¿Õ";
+        if (StrUtil.isBlank(interfaceName) || StrUtil.isBlank(pe)  ) {
+            results = "æ ¹æ®çº¿è·¯site_id æŸ¥è¯¢çš„ interfaceï¼Œpe æœ‰ä¸€é¡¹æˆ–è€…å¤šé¡¹ä¸ºç©º";
             Connection conn = OracleDbUtil.getRemedyProConnection();
             int i = insertWorkLog(results, caseId, conn);
             GetResults.caseIdMap.remove(caseId);
@@ -300,7 +300,7 @@ public class GetResults {
 
 
     /**
-     * µ¥Ïß¶ª°ü ¶Ô¶Ëip
+     * å•çº¿ä¸¢åŒ… å¯¹ç«¯ip
      *
      * @param caseId
      * @return
@@ -314,7 +314,7 @@ public class GetResults {
         String peWanIp = paramMap.get("peWanIp");
 
         if (StrUtil.isBlank(interfaceName) || StrUtil.isBlank(pe) || StrUtil.isBlank(ceWanIp) || StrUtil.isBlank(peWanIp)) {
-            results = "¸ù¾İÏßÂ·site_id ²éÑ¯µÄ interface,pe,ceWanIp,peWanIp ÓĞÒ»Ïî»òÕß¶àÏîÎª¿Õ";
+            results = "æ ¹æ®çº¿è·¯site_id æŸ¥è¯¢çš„ interface,pe,ceWanIp,peWanIp æœ‰ä¸€é¡¹æˆ–è€…å¤šé¡¹ä¸ºç©º";
             Connection conn = OracleDbUtil.getRemedyProConnection();
             int i = insertWorkLog(results, caseId, conn);
             OracleDbUtil.closeConnection(conn);
@@ -357,7 +357,7 @@ public class GetResults {
 
 
     /**
-     * ab¶ª°ü ºÍ caseId ¸üĞÂÊı¾İ¿â
+     * abä¸¢åŒ… å’Œ caseId æ›´æ–°æ•°æ®åº“
      *
      * @param trunkName
      * @param caseId
@@ -374,9 +374,9 @@ public class GetResults {
         String vrf2 = paramMap.get("vrf2");
         String peWan2 = paramMap.get("peWan2");
 
-        if (StrUtil.isBlank(interfaceName1) || StrUtil.isBlank(pe1) || StrUtil.isBlank(vrf1) || StrUtil.isBlank(peWan1) ||
-                StrUtil.isBlank(interfaceName2) || StrUtil.isBlank(pe2) || StrUtil.isBlank(vrf2) || StrUtil.isBlank(peWan2)) {
-            results = "¸ù¾İÏßÂ·site_id ²éÑ¯µÄ interface£¬pe,vrf,pe_wan_ipÓĞÒ»Ïî»òÕß¶àÏîÎª¿Õ";
+        if (StrUtil.isBlank(interfaceName1) || StrUtil.isBlank(pe1)  || StrUtil.isBlank(peWan1) ||
+                StrUtil.isBlank(interfaceName2) || StrUtil.isBlank(pe2) || StrUtil.isBlank(peWan2)) {
+            results = "æ ¹æ®çº¿è·¯site_id æŸ¥è¯¢çš„ interfaceï¼Œpe,pe_wan_ipæœ‰ä¸€é¡¹æˆ–è€…å¤šé¡¹ä¸ºç©º";
             Connection conn = OracleDbUtil.getRemedyProConnection();
             int i = insertWorkLog(results, caseId, conn);
             OracleDbUtil.closeConnection(conn);
@@ -418,34 +418,34 @@ public class GetResults {
     }
 
     /**
-     * ´ÓÊÓÍ¼ÖĞ»ñÈ¡ËùÓĞµÄcase
+     * ä»è§†å›¾ä¸­è·å–æ‰€æœ‰çš„case
      */
     public static void getAllCaseByView() {
         String sql = "select * from  aradmin.HPD_HELPDESK_ACT_VIEW    order by case_id desc";
         Connection con = OracleDbUtil.getRemedyProConnection();
         List<TreeMap<String, Object>> list = OracleDbUtil.executeQueryMap(sql, null, con);
-        //¶ª°ü
-        HashMap<String, ArrayList<CaseView>> repeatMap = new HashMap<>();//ÓÃÓÚ¼ÇÂ¼ÖØ¸´µÄsite Case Map
-        HashMap<String, CaseView> onlyOneMap = new HashMap<>();//ÓÃÓÚ¼ÇÂ¼Ö»ÓĞÒ»ÌõsiteµÄ Case Map
-        List<CaseView> trunkList = new ArrayList<>();//¹Ç¸ÉÀàĞÍµÄ
-        List<CaseView> flappingList = new ArrayList<>();//ÉÁ¶ÏÀàĞÍµÄ
-        List<CaseView> otherList = new ArrayList<>();//ÆäËûÀàĞÍÀàĞÍµÄ
+        //ä¸¢åŒ…
+        HashMap<String, ArrayList<CaseView>> repeatMap = new HashMap<>();//ç”¨äºè®°å½•é‡å¤çš„site Case Map
+        HashMap<String, CaseView> onlyOneMap = new HashMap<>();//ç”¨äºè®°å½•åªæœ‰ä¸€æ¡siteçš„ Case Map
+        List<CaseView> trunkList = new ArrayList<>();//éª¨å¹²ç±»å‹çš„
+        List<CaseView> flappingList = new ArrayList<>();//é—ªæ–­ç±»å‹çš„
+        List<CaseView> otherList = new ArrayList<>();//å…¶ä»–ç±»å‹ç±»å‹çš„
 
 
         HashMap<String, String> repeatCaseIdMap = checkIsInCaseIdMap(list);
         for (int i = 0; i < list.size(); i++) {
             TreeMap<String, Object> tempMap = list.get(i);
             String caseId = tempMap.get("CASE_ID").toString();
-            if (!StrUtil.isBlank(repeatCaseIdMap.get(caseId))) {//Èç¹ûÊÇÖØ¸´µÄcaseId,Ö®Ç°Ã»ÓĞ´¦ÀíÍê Ìø¹ı
+            if (!StrUtil.isBlank(repeatCaseIdMap.get(caseId))) {//å¦‚æœæ˜¯é‡å¤çš„caseId,ä¹‹å‰æ²¡æœ‰å¤„ç†å®Œ è·³è¿‡
                 continue;
-            } else {//²»´æÔÚÖØ¸´
+            } else {//ä¸å­˜åœ¨é‡å¤
                 GetResults.caseIdMap.put(caseId, caseId);
             }
             CaseView caseView = new CaseView();
             caseView.setCaseId(tempMap.get("CASE_ID").toString());
             caseView.setPeName(tempMap.get("PE_ROUTER").toString());
             caseView.setInterfaceName(tempMap.get("PE_PORT_INTERFACE").toString());
-            caseView.setVrf(tempMap.get("VRF").toString());
+            caseView.setVrf(StrUtil.isBlank(tempMap.get("VRF").toString())?"":tempMap.get("VRF").toString());
             caseView.setCaseSummary(tempMap.get("SUMMARY").toString());
             caseView.setWebType(tempMap.get("Type").toString());
             caseView.setWebItem(tempMap.get("item").toString());
@@ -457,33 +457,33 @@ public class GetResults {
             caseView.setSourceIp(tempMap.get("SOURCE_IP").toString());
             caseView.setTrunkName(tempMap.get("Trunk_Name").toString());
             System.out.println(JSONUtil.toJsonStr(caseView));
-            if (caseView.getWebType().indexOf("Core Network") > -1) {//¹Ç¸ÉÀàĞÍ
+            if (caseView.getWebType().indexOf("Core Network") > -1) {//éª¨å¹²ç±»å‹
                 trunkList.add(caseView);
-            } else if (caseView.getWebItem().indexOf("Packet loss") > -1) {//¶ª°ü
-                if (onlyOneMap.containsKey(caseView.getCaseId())) {//Èç¹ûÓĞ¶àÌõA-B¶ª°ü,ÔÙ¸ù¾İÊÇ·ñ´æÔÚdstIp Çø·Ö(site2site Packet loss)(site-dst Packet loss)
+            } else if (caseView.getWebItem().indexOf("Packet loss") > -1) {//ä¸¢åŒ…
+                if (onlyOneMap.containsKey(caseView.getCaseId())) {//å¦‚æœæœ‰å¤šæ¡A-Bä¸¢åŒ…,å†æ ¹æ®æ˜¯å¦å­˜åœ¨dstIp åŒºåˆ†(site2site Packet loss)(site-dst Packet loss)
                     ArrayList<CaseView> tempList = new ArrayList<>();
                     tempList.add(onlyOneMap.get(caseView.getCaseId()));
                     tempList.add(caseView);
                     onlyOneMap.remove(caseView.getCaseId());
                     repeatMap.put(caseView.getCaseId(), tempList);
-                } else {//Ò»Ìõ È»ºóÔÙ¸ù¾İÊÇ·ñ´æÔÚdstIp Çø·Ö(Local packet loss)()
+                } else {//ä¸€æ¡ ç„¶åå†æ ¹æ®æ˜¯å¦å­˜åœ¨dstIp åŒºåˆ†(Local packet loss)()
                     onlyOneMap.put(caseView.getCaseId(), caseView);
                 }
-            } else if (caseView.getWebItem().indexOf("Service down") > -1) {//ÉÁ¶ÏÀàĞÍ
+            } else if (caseView.getWebItem().indexOf("Service down") > -1) {//é—ªæ–­ç±»å‹
                 flappingList.add(caseView);
             }else if(!StrUtil.isBlank(caseView.getWebItem())&&!StrUtil.isBlank(caseView.getWebType())){
                 otherList.add(caseView);
             }
         }
         OracleDbUtil.closeConnection(con);
-        for (int i = 0; i < trunkList.size(); i++) {//¹Ç¸ÉÀàĞÍ
+        for (int i = 0; i < trunkList.size(); i++) {//éª¨å¹²ç±»å‹
             CaseView caseView = trunkList.get(i);
             TrunkManage trunkManage = new TrunkManage(caseView);
             trunkManage.start();
             ThreadUtil.sleep(2000);
         }
 
-        for (int i = 0; i < flappingList.size(); i++) {//ÉÁ¶ÏÀàĞÍ
+        for (int i = 0; i < flappingList.size(); i++) {//é—ªæ–­ç±»å‹
             CaseView caseView = flappingList.get(i);
             FlappingManage flappingManage = new FlappingManage(caseView);
             flappingManage.start();
@@ -491,7 +491,7 @@ public class GetResults {
 
         }
 
-        for (String caseId : onlyOneMap.keySet()) {//µ¥Ïß¶ª°ü/µ¥Ïß¶ª°ü¶Ô¶Ë¼à²â
+        for (String caseId : onlyOneMap.keySet()) {//å•çº¿ä¸¢åŒ…/å•çº¿ä¸¢åŒ…å¯¹ç«¯ç›‘æµ‹
             CaseView caseView = onlyOneMap.get(caseId);
             OnlyOneSiteManage onlyOneSiteManage = new OnlyOneSiteManage(caseView);
             onlyOneSiteManage.start();
@@ -500,14 +500,14 @@ public class GetResults {
 
         }
 
-        for (String caseId : repeatMap.keySet()) {//a-b¶ª°ü
+        for (String caseId : repeatMap.keySet()) {//a-bä¸¢åŒ…
             ArrayList<CaseView> caseViews = repeatMap.get(caseId);
             ABSiteManage abSiteManage = new ABSiteManage(caseViews);
             abSiteManage.start();
             ThreadUtil.sleep(2000);
         }
 
-        for (int i = 0; i < otherList.size(); i++) {//·Ç ¶ª°ü ÖĞ¶Ï ÀàĞÍµÄÇå¿Õ
+        for (int i = 0; i < otherList.size(); i++) {//é ä¸¢åŒ… ä¸­æ–­ ç±»å‹çš„æ¸…ç©º
             CaseView caseView=otherList.get(i);
             ClearOtherManage clearOtherManage=new ClearOtherManage(caseView);
             clearOtherManage.start();
@@ -523,7 +523,7 @@ public class GetResults {
     }
 
     /**
-     * ÅĞ¶ÏÊÇ²»ÊÇ´æÔÚÓÚ Ö®Ç°ÕıÔÚÖ´ĞĞµÄ Case
+     * åˆ¤æ–­æ˜¯ä¸æ˜¯å­˜åœ¨äº ä¹‹å‰æ­£åœ¨æ‰§è¡Œçš„ Case
      *
      * @param caseId
      * @return
@@ -543,21 +543,21 @@ public class GetResults {
     }
 
     /**
-     * ²âÊÔ·½·¨Àà
+     * æµ‹è¯•æ–¹æ³•ç±»
      */
     public static void testMain() {
         GetResults getResults = new GetResults();
-        String caseId = "HD0000002828188";//case±àºÅ
-        int connTotal = 1;//Á¬½Óggw´ÎÊı
+        String caseId = "HD0000002828188";//caseç¼–å·
+        int connTotal = 1;//è¿æ¥ggwæ¬¡æ•°
 
 
-        //¹Ç¸É»ñÈ¡½á¹û
+        //éª¨å¹²è·å–ç»“æœ
         String trunkName = "CNGUZYUJ1001C.ge-11/0/8.50-CNGUZYUJ1004E.ge-0/0/0.50";
 //        System.out.println(trunkProblem(trunkName));
 //        System.out.println( GetResults.trunkDispose(trunkName,caseId,connTotal));
 
 
-        //ÉÁ¶Ï»ñÈ¡½á¹û
+        //é—ªæ–­è·å–ç»“æœ
 //        http://10.181.160.4:8089/flapping_problem?interface=ge-0/1/2.303&pe=CNSHYCXL1001E&vrf=373449250
         HashMap<String, String> paramMap = new HashMap<>();
         String interfaceName = "ge-0/1/2.303";
@@ -570,7 +570,7 @@ public class GetResults {
 //        System.out.println(GetResults.flappingDispose(paramMap,caseId,connTotal));
 
 
-        //a-b¶ª°ü
+        //a-bä¸¢åŒ…
         String interfaceName1 = "ge-0/1/0.666";
         String pe1 = "CNSHHSJG1001E";
         String vrf1 = "211450800";
@@ -587,29 +587,29 @@ public class GetResults {
         paramMap.put("pe2", pe2);
         paramMap.put("vrf2", vrf2);
         paramMap.put("peWan2", pewan2);
-//        System.out.println("case:"+caseId+"\ttype:¶ª°ü"+"\t"+GetResults.abPacketLossDispose(paramMap,caseId,connTotal));
+//        System.out.println("case:"+caseId+"\ttype:ä¸¢åŒ…"+"\t"+GetResults.abPacketLossDispose(paramMap,caseId,connTotal));
 
     }
 
 
     /**
-     * ¼ÙµÄÁÙÊ±²ÎÊı£¬ÓÃÓÚ½á¹û²âÊÔ
+     * å‡çš„ä¸´æ—¶å‚æ•°ï¼Œç”¨äºç»“æœæµ‹è¯•
      *
      * @return
      */
     public static String getTempParam() {
-        String tempParam = "¹Ç¸É ¼ì²é\n" +
+        String tempParam = "éª¨å¹² æ£€æŸ¥\n" +
                 "\n" +
                 "+++++PE1:CNGUZYUJ1001C+++++Interface1:ge-11/0/8.50+++++PE2:CNGUZYUJ1004E+++++Interface2:ge-0/0/0.50+++++\n" +
-                "PE1:CNGUZYUJ1001C    ¶Ë¿Ú:Up.\n" +
-                "PE1:CNGUZYUJ1001C    ÊÕ·¢¹âÕı³£.\n" +
-                "PE1:CNGUZYUJ1001C    COSÎŞDrop.\n" +
-                "PE2:CNGUZYUJ1004E    ¶Ë¿Ú:Up.\n" +
-                "PE2:CNGUZYUJ1004E    ÊÕ·¢¹âÕı³£.\n" +
-                "PE2:CNGUZYUJ1004E    COSÎŞDrop.\n" +
-                "PE1:CNGUZYUJ1001C    Ä¬ÈÏÊÕ·¢°ü: 0% packet loss.\n" +
-                "PE1:CNGUZYUJ1001C    ´ó°üÊÕ·¢: 0% packet loss.\n" +
-                "PE1:CNGUZYUJ1001C    ISISĞ­ÒéUP, Last transition:117w6d 04:59:58 ago\n" +
+                "PE1:CNGUZYUJ1001C    ç«¯å£:Up.\n" +
+                "PE1:CNGUZYUJ1001C    æ”¶å‘å…‰æ­£å¸¸.\n" +
+                "PE1:CNGUZYUJ1001C    COSæ— Drop.\n" +
+                "PE2:CNGUZYUJ1004E    ç«¯å£:Up.\n" +
+                "PE2:CNGUZYUJ1004E    æ”¶å‘å…‰æ­£å¸¸.\n" +
+                "PE2:CNGUZYUJ1004E    COSæ— Drop.\n" +
+                "PE1:CNGUZYUJ1001C    é»˜è®¤æ”¶å‘åŒ…: 0% packet loss.\n" +
+                "PE1:CNGUZYUJ1001C    å¤§åŒ…æ”¶å‘: 0% packet loss.\n" +
+                "PE1:CNGUZYUJ1001C    ISISåè®®UP, Last transition:117w6d 04:59:58 ago\n" +
                 "====================================================================================================\n" +
                 "----------------------------------------------------------------------------------------------------\n" +
                 "CNGUZYUJ1001C>show interfaces ge-11/0/8\n" +
@@ -1104,18 +1104,18 @@ public class GetResults {
     }
 
     /**
-     * ½ØÈ¡½á¹ûµÄ¼òÒªĞÅÏ¢
+     * æˆªå–ç»“æœçš„ç®€è¦ä¿¡æ¯
      *
      * @param results
      * @return
      */
     public static String resultsGetSummary(String results) {
         if (StrUtil.isBlank(results)) {
-            return "²ÎÊıÎª¿Õ";
+            return "å‚æ•°ä¸ºç©º";
         } else {
             String summary = null;
             if (results.indexOf("====================================================================================================") == -1) {
-                summary = "×Ô¶¯²éÑ¯ ÏßÂ·×´Ì¬ ggwAPI ·µ»Ø²ÎÊıÒì³££¬Çë¼ì²éÁªÏµ¿ª·¢ÈËÔ±¼ì²é²ÎÊı";
+                summary = "è‡ªåŠ¨æŸ¥è¯¢ çº¿è·¯çŠ¶æ€ ggwAPI è¿”å›å‚æ•°å¼‚å¸¸ï¼Œè¯·æ£€æŸ¥è”ç³»å¼€å‘äººå‘˜æ£€æŸ¥å‚æ•°";
                 return summary;
             } else {
                 summary = results.substring(0, results.indexOf("===================================================================================================="));

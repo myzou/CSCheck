@@ -88,7 +88,7 @@ public class OracleDbUtil {
 
 
     /**
-     * Íê³É¶ÔÊı¾İ¿âµÄ±íµÄÌí¼ÓÉ¾³ıºÍĞŞ¸ÄµÄ²Ù×÷
+     * å®Œæˆå¯¹æ•°æ®åº“çš„è¡¨çš„æ·»åŠ åˆ é™¤å’Œä¿®æ”¹çš„æ“ä½œ
      * @param sql
      * @param params
      * @return
@@ -117,10 +117,10 @@ public class OracleDbUtil {
 
 
     /**
-     * ´ÓÊı¾İ¿âÖĞ²éÑ¯Êı¾İ
+     * ä»æ•°æ®åº“ä¸­æŸ¥è¯¢æ•°æ®
      * @param sql		sql
-     * @param params  ? ²ÎÊıÉèÖµ
-     * @param con  ?  Á¬½Ó
+     * @param params  ? å‚æ•°è®¾å€¼
+     * @param con  ?  è¿æ¥
      * @return
      * @throws SQLException
      */
@@ -161,7 +161,7 @@ public class OracleDbUtil {
     }
 
     /**
-     * jdbcµÄ·â×°¿ÉÒÔÓÃ·´Éä»úÖÆÀ´·â×°,°Ñ´ÓÊı¾İ¿âÖĞ»ñÈ¡µÄÊı¾İ·â×°µ½Ò»¸öÀàµÄ¶ÔÏóÀï
+     * jdbcçš„å°è£…å¯ä»¥ç”¨åå°„æœºåˆ¶æ¥å°è£…,æŠŠä»æ•°æ®åº“ä¸­è·å–çš„æ•°æ®å°è£…åˆ°ä¸€ä¸ªç±»çš„å¯¹è±¡é‡Œ
      *
      * @param sql
      * @param params
@@ -186,7 +186,7 @@ public class OracleDbUtil {
             ResultSetMetaData metaData = results.getMetaData();
             int cols_len = metaData.getColumnCount();
             while (results.next()) {
-                T resultObject = cls.newInstance();  // Í¨¹ı·´Éä»úÖÆ´´½¨ÊµÀı
+                T resultObject = cls.newInstance();  // é€šè¿‡åå°„æœºåˆ¶åˆ›å»ºå®ä¾‹
                 for (int i = 0; i < cols_len; i++) {
                     String cols_name = metaData.getColumnName(i + 1);
                     Object cols_value = results.getObject(cols_name);
@@ -200,8 +200,8 @@ public class OracleDbUtil {
                         field = 	cls.getDeclaredField( cols_name);
                     }
     //		                System.out.println(cols_value+"\t"+cols_name+"\t"+field.getType());
-                    field.setAccessible(true); // ´ò¿ªjavabeanµÄ·ÃÎÊprivateÈ¨ÏŞ
-                    //Èç¹û·µ»ØÃ»ÓĞÖµµÄÊ±ºòBigDecimalºÍLongÀàĞÍ»á×ªÎªString£¬ËùÒÔÒªĞÂ¼Ó¸ö¶ÔÓ¦µÄÖµ
+                    field.setAccessible(true); // æ‰“å¼€javabeançš„è®¿é—®privateæƒé™
+                    //å¦‚æœè¿”å›æ²¡æœ‰å€¼çš„æ—¶å€™BigDecimalå’ŒLongç±»å‹ä¼šè½¬ä¸ºStringï¼Œæ‰€ä»¥è¦æ–°åŠ ä¸ªå¯¹åº”çš„å€¼
                     if(StrUtil.isBlank(cols_value.toString())){
                         if(field.getType().toString() .indexOf("BigDecimal")>-1){
                             field.set(resultObject, new BigDecimal(0));
@@ -233,7 +233,7 @@ public class OracleDbUtil {
 
 
     /**
-     * ²âÊÔ Ôö¼Ó ĞŞ¸Ä É¾³ı·½·¨µÄµ÷ÓÃ
+     * æµ‹è¯• å¢åŠ  ä¿®æ”¹ åˆ é™¤æ–¹æ³•çš„è°ƒç”¨
      */
     public static void testInsertUpdateDelete(){
 
@@ -246,7 +246,7 @@ public class OracleDbUtil {
                 " INSERT INTO TIDESTONE.CPCTIDES_HELPDESK_TICKET (HPD_CASE_ID, SYS_Create_User,TEMP_WORKLOG,TEST_RESULT,CS_FEEDBACK,NOC_FEEDBACK) VALUES (?,'Auto_Check_Type','Worklog',your_value_name,'0','0');\n" +
                 "end;";
         List<Object> params=new ArrayList<>();
-        params.add("Õâ¸öÊÇÒ»¸ö²âÊÔ¼ÇÂ¼");
+        params.add("è¿™ä¸ªæ˜¯ä¸€ä¸ªæµ‹è¯•è®°å½•");
         params.add("HD0000002827608");
         int i= OracleDbUtil.executeUpdate(sql,params,devConn);
         System.out.println("i:"+i);
@@ -254,7 +254,7 @@ public class OracleDbUtil {
     }
 
     /**
-     * ²âÊÔ²éÑ¯ ·½·¨µÄµ÷ÓÃ
+     * æµ‹è¯•æŸ¥è¯¢ æ–¹æ³•çš„è°ƒç”¨
      */
     public static void testQuery(){
         Connection conn= OracleDbUtil.getRemedyProConnection();

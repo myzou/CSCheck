@@ -32,7 +32,7 @@ public class ClearOtherManage extends Thread {
             int i = GetResults.insertWorkLog(results, caseId, conn);
             OracleDbUtil.closeConnection(conn);
             GetResults.caseIdMap.remove(caseId);
-            log.info(  "case:"+caseView.getCaseId()+"\ttype:其他类型 \t"+ i );
+            log.info(  "case:"+caseView.getCaseId()+"\ttype:鍏朵粬绫诲瀷 \t"+ i );
 
         } catch (Exception e) {
             e.printStackTrace();

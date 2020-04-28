@@ -44,12 +44,12 @@ public class OnlyOneSiteManage extends  Thread{
             paramMap.put("peWanIp",peWanIp);
             paramMap.put("ceWanIp",ceWanIp);
             paramMap.put("dstIP",dstIP);
-            if(StrUtil.isBlank(caseView.getDestinationIp())&&caseView.getDestinationIp().length()<6){//Ã»ÓÐ¶Ô¶Ëip
-                log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:µ¥Ïß¶ª°ü"+"\t"+ GetResults.packetLossDispose(paramMap,caseId,connTotal));
-            }else{//ÓÐ¶Ô¶Ëip
+            if(StrUtil.isBlank(caseView.getDestinationIp())&&caseView.getDestinationIp().length()<6){//æ²¡æœ‰å¯¹ç«¯ip
+                log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:å•çº¿ä¸¢åŒ…"+"\t"+ GetResults.packetLossDispose(paramMap,caseId,connTotal));
+            }else{//æœ‰å¯¹ç«¯ip
                 //CIA ISP =INTERNET
                 //TCP TCE==VPN
-                log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:µ¥Ïß¶ª°ü ÓÐ¶Ô¶ËÏßÂ· »¥ÁªÍø"+"\t"+ GetResults.packetLossDestinationDispose(paramMap,caseId,connTotal));
+                log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:å•çº¿ä¸¢åŒ… æœ‰å¯¹ç«¯çº¿è·¯ äº’è”ç½‘"+"\t"+ GetResults.packetLossDestinationDispose(paramMap,caseId,connTotal));
             }
 
         } catch (Exception e) {
