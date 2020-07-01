@@ -21,8 +21,16 @@ public class CaseView {
     private String webService;//页面显示的service
     private String webType;//界面显示的类型
     private String webItem;//界面显示的Item
+    private String prvoisioningPartner;//页面显示 Provisioning Partner
+
+    public String getPrvoisioningPartner() {
+        return prvoisioningPartner;
+    }
 
 
+    public void setPrvoisioningPartner(String prvoisioningPartner) {
+        this.prvoisioningPartner = prvoisioningPartner;
+    }
 
     public String getCaseId() {
         return caseId;

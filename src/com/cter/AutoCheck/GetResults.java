@@ -1,13 +1,16 @@
 package com.cter.AutoCheck;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.cter.util.BaseLog;
 import com.cter.util.LoadPropertiestUtil;
+import com.cter.util.TempDBUtils;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -21,7 +24,7 @@ public class GetResults {
     static BaseLog caseIdLog = new BaseLog("CSCaseIDLog");
 
 
-    //    static String url = "http://10.180.5.189:8089";
+//    static String url = "http://10.180.5.189:8089";
     static String url = "http://10.181.160.4:8089";
 
     //用于记录正在执行的 caseID Map
@@ -42,19 +45,6 @@ public class GetResults {
         return results;
     }
 
-    /**
-     * 闪断问题
-     *
-     * @param map
-     * @return
-     */
-    public static String flappingProblem(String interfaceName, String pe, String vrf) {
-        String problem = "flapping_problem";
-//        http://10.180.5.189:8089/flapping_problem?interface=ge-0/1/0.605&pe=CNSHHSJG1001E&vrf=211374640
-        String tempUrl = url + "/" + problem + "?interface=" + interfaceName + "&pe=" + pe + "&vrf=" + vrf;
-        String results = HttpUtil.get(tempUrl);
-        return results;
-    }
 
     /**
      * 单线丢包问题
@@ -72,19 +62,22 @@ public class GetResults {
 
 
     /**
-     * 单线丢包 对端
-     * ab_loss_internet
+     * 单Internet Unreachable 互联网不能互访本地或外地网络 问题
      *
      * @param map
      * @return
      */
-    public static String packetLossDestinationProblem(String interfaceName, String pe, String ceWanIp, String peWanIp, String dstIP) {
-        String problem = "loss_dstip";
-        //        http://10.181.160.4:8089/loss_dstip?interface=ge-0/1/0.605&pe=CNSHHSJG1001E&vrf=&ce_wan_ip=10.114.109.178&pe_wan_ip=10.114.109.177&dst_ip=8.8.8.8
-        String tempUrl = url + "/" + problem + "?interface=" + interfaceName + "&pe=" + pe + "&ce_wan_ip=" + ceWanIp + "&pe_wan_ip=" + peWanIp + "&dst_ip=" + dstIP;
+    public static String internetProblem(HashMap<String, String> paramMap) {
+        String problem = "internet_unreachable_internet";
+        //http://10.180.5.189:8089/internet_unreachable_internet?interface=ge-0/1/0.1114&pe=CNSUZCYY1004E&vrf=229466370&site_id=TW4663739157SuZ&prvoisioning_partner=CEC-CN&pe_wan_ip=10.117.238.133&dst_ip=8.8.8.8
+        String tempUrl = url + "/" + problem + "?interface=" + paramMap.get("interfaceName") + "&pe=" + paramMap.get("pe") + "&vrf=" + paramMap.get("vrf")+ "&site_id=" + paramMap.get("site_id")+ "&prvoisioning_partner=" + paramMap.get("prvoisioning_partner")+ "&pe_wan_ip=" + paramMap.get("pe_wan_ip")+ "&dst_ip=" + paramMap.get("dst_ip");
         String results = HttpUtil.get(tempUrl);
         return results;
     }
+
+
+
+
 
     /**
      * AB丢包问题
@@ -92,14 +85,50 @@ public class GetResults {
      * @param map
      * @return
      */
-    public static String abPacketLossProblem(String interfaceName1, String pe1, String vrf1, String peWan1, String interfaceName2, String pe2, String vrf2, String peWan2) {
+    public static String abPacketLossProblem(String interfaceName1, String pe1, String vrf1, String peWan1, String interfaceName2, String pe2, String vrf2, String peWan2,String destIP) {
         String problem = "ab_loss_site_site";
 //http://10.180.5.189:8089/ab_loss_site_site?interface1=ge-0/1/0.605&pe1=CNSHHSJG1001E&vrf1=211374640&interface2=ge-0/3/0.1152&pe2=HKHKGCTT1001E&vrf2=108374640&pe_wan1=10.114.109.177&pe_wan2=10.114.110.121
         String tempUrl = url + "/" + problem + "?pe1=" + pe1 + "&interface1=" + interfaceName1 + "&vrf1=" + vrf1 + "&pe_wan1=" + peWan1 +
-                "&pe2=" + pe2 + "&interface2=" + interfaceName2 + "&vrf2=" + vrf2 + "&pe_wan2=" + peWan2;
+                "&pe2=" + pe2 + "&interface2=" + interfaceName2 + "&vrf2=" + vrf2 + "&pe_wan2=" + peWan2+ "&destIP=" + destIP;;
         String results = HttpUtil.get(tempUrl);
         return results;
     }
+
+
+    /**
+     * 根据caseView 插入到日志表
+     * @param caseView
+     * @return
+     */
+    public static int insertCaseLog(CaseView caseView){
+
+        String username="root";
+        String password="root1234root";
+        String url="jdbc:log4jdbc:mysql://210.5.3.30:3306/empower?characterEncoding=utf-8";
+        String driver="net.sf.log4jdbc.DriverSpy";
+        TempDBUtils tempDBUtils=new TempDBUtils(username,password,driver,url);
+
+        String sql = "INSERT INTO `case_log`(`case_id`,  `web_item`, `site_id`,`insert_data`, `rest`,  `insert_time`, `update_time`) VALUES " +
+                "(?,?,?,?,?,?,?)";
+        List<Object> params = new ArrayList<>();
+
+        params.add(caseView.getCaseId());
+        params.add(caseView.getWebItem());
+        params.add(caseView.getSiteId());
+        params.add(JSONUtil.toJsonStr(caseView));
+        params.add("待处理");
+        params.add(DateUtil.now());
+        params.add(DateUtil.now());
+        int i=0;
+        try {
+             i=tempDBUtils.executeUpdate(sql,params);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return i;
+    }
+
+
 
     /**
      * 插入到workLog
@@ -109,6 +138,7 @@ public class GetResults {
      * @return
      */
     public static int insertWorkLog(String results, String caseId, Connection conn) {
+
         List<Object> params = new ArrayList<>();
         String summary = resultsGetSummary(results);
         CSCheckLog.info("caseId:" + caseId);
@@ -139,6 +169,36 @@ public class GetResults {
         params.add(summary);
         params.add(caseId);
         int i = OracleDbUtil.executeUpdate(sql, params, conn);
+
+
+        String username="root";
+        String password="root1234root";
+        String url="jdbc:log4jdbc:mysql://210.5.3.30:3306/empower?characterEncoding=utf-8";
+        String driver="net.sf.log4jdbc.DriverSpy";
+        TempDBUtils tempDBUtils=new TempDBUtils(username,password,driver,url);
+        String updateSql = "UPDATE `case_log` SET `rest` = ?, `summary` = ?, `work_log` = ?, `update_time` = ? WHERE `case_id` = ?";
+        String rest="正常";
+        params=new ArrayList<Object>();
+
+        if(summary.indexOf("为空")>-1){
+            rest="线路参数不全";
+        }else if(summary.indexOf("Work Log")>-1){
+            rest="未处理类型";
+        }else  if(summary.indexOf("异常")>-1&&summary.indexOf("+++++")==-1){
+            rest="异常";
+        }
+
+        params.add(rest);
+        params.add(summary);
+        params.add(results);
+        params.add(DateUtil.now());
+        params.add(caseId);
+        try {
+            tempDBUtils.executeUpdate(updateSql,params);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return i;
     }
 
@@ -195,35 +255,37 @@ public class GetResults {
     }
 
     /**
-     * 根据闪断信息 和 caseId 更新数据库
+     * Internet Unreachable 互联网不能互访本地或外地网络  更新数据库
      *
      * @param caseId
      * @return
      */
-    public static int flappingDispose(HashMap<String, String> paramMap, String caseId, int connTotal) {
+    public static int internetDispose(HashMap<String, String> paramMap, String caseId, int connTotal) {
         String results = "";
         String interfaceName = paramMap.get("interfaceName");
         String pe = paramMap.get("pe");
         String vrf = paramMap.get("vrf");
-        if (StrUtil.isBlank(interfaceName) || StrUtil.isBlank(pe) ) {
-            results = "根据线路site_id 查询的 interface，pe有一项或者多项为空";
+        if (StrUtil.isBlank(interfaceName) || StrUtil.isBlank(pe)  ) {
+            results = "根据线路site_id 查询的 interface，pe 有一项或者多项为空";
             Connection conn = OracleDbUtil.getRemedyProConnection();
             int i = insertWorkLog(results, caseId, conn);
-            OracleDbUtil.closeConnection(conn);
             GetResults.caseIdMap.remove(caseId);
+            OracleDbUtil.closeConnection(conn);
             return i;
         }
         try {
-            results = flappingProblem(interfaceName, pe, vrf);
+
+            results = internetProblem(paramMap);
             if (results.length() < 100) {
                 if (connTotal == 4) {
-                    results = "GGWAPI cannot connect" + "Auto check  faled,Please check manually";
+                    results = "GGWAPI cannot connect" +
+                            "Auto check  faled,Please check manually";
                     Connection conn = OracleDbUtil.getRemedyProConnection();
                     int i = insertWorkLog(results, caseId, conn);
                     GetResults.caseIdMap.remove(caseId);
                     return 0;
                 } else {
-                    return flappingDispose(paramMap, caseId, connTotal + 1);
+                    return internetDispose(paramMap, caseId, connTotal + 1);
                 }
             } else {
                 Connection conn = OracleDbUtil.getRemedyProConnection();
@@ -234,16 +296,18 @@ public class GetResults {
         } catch (Exception e) {
             e.printStackTrace();
             if (connTotal == 4) {
-                results = "GGWAPI cannot connect" + "Auto check  faled,Please check manually";
+                results = "GGWAPI cannot connect" +
+                        "Auto check  faled,Please check manually";
                 Connection conn = OracleDbUtil.getRemedyProConnection();
                 int i = insertWorkLog(results, caseId, conn);
                 GetResults.caseIdMap.remove(caseId);
                 return 0;
             } else {
-                return flappingDispose(paramMap, caseId, connTotal + 1);
+                return internetDispose(paramMap, caseId, connTotal + 1);
             }
         }
     }
+
 
     /**
      * 根据丢包 单线 和 caseId 更新数据库
@@ -299,61 +363,6 @@ public class GetResults {
     }
 
 
-    /**
-     * 单线丢包 对端ip
-     *
-     * @param caseId
-     * @return
-     */
-    public static int packetLossDestinationDispose(HashMap<String, String> paramMap, String caseId, int connTotal) {
-        String results = "";
-        String interfaceName = paramMap.get("interfaceName");
-        String pe = paramMap.get("pe");
-        String dstIP = paramMap.get("dstIP");
-        String ceWanIp = paramMap.get("ceWanIp");
-        String peWanIp = paramMap.get("peWanIp");
-
-        if (StrUtil.isBlank(interfaceName) || StrUtil.isBlank(pe) || StrUtil.isBlank(ceWanIp) || StrUtil.isBlank(peWanIp)) {
-            results = "根据线路site_id 查询的 interface,pe,ceWanIp,peWanIp 有一项或者多项为空";
-            Connection conn = OracleDbUtil.getRemedyProConnection();
-            int i = insertWorkLog(results, caseId, conn);
-            OracleDbUtil.closeConnection(conn);
-            GetResults.caseIdMap.remove(caseId);
-            return i;
-        }
-        try {
-            results = packetLossDestinationProblem(interfaceName, pe, ceWanIp, peWanIp, dstIP);
-            if (results.length() < 100) {
-                if (connTotal == 4) {
-                    results = "GGWAPI cannot connect" +
-                            "Auto check  faled,Please check manually";
-                    Connection conn = OracleDbUtil.getRemedyProConnection();
-                    int i = insertWorkLog(results, caseId, conn);
-                    GetResults.caseIdMap.remove(caseId);
-                    return 0;
-                } else {
-                    return packetLossDestinationDispose(paramMap, caseId, connTotal + 1);
-                }
-            } else {
-                Connection conn = OracleDbUtil.getRemedyProConnection();
-                int i = insertWorkLog(results, caseId, conn);
-                GetResults.caseIdMap.remove(caseId);
-                return i;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (connTotal == 4) {
-                results = "GGWAPI cannot connect" +
-                        "Auto check  faled,Please check manually";
-                Connection conn = OracleDbUtil.getRemedyProConnection();
-                int i = insertWorkLog(results, caseId, conn);
-                GetResults.caseIdMap.remove(caseId);
-                return 0;
-            } else {
-                return packetLossDestinationDispose(paramMap, caseId, connTotal + 1);
-            }
-        }
-    }
 
 
     /**
@@ -373,7 +382,6 @@ public class GetResults {
         String pe2 = paramMap.get("pe2");
         String vrf2 = paramMap.get("vrf2");
         String peWan2 = paramMap.get("peWan2");
-
         if (StrUtil.isBlank(interfaceName1) || StrUtil.isBlank(pe1)  || StrUtil.isBlank(peWan1) ||
                 StrUtil.isBlank(interfaceName2) || StrUtil.isBlank(pe2) || StrUtil.isBlank(peWan2)) {
             results = "根据线路site_id 查询的 interface，pe,pe_wan_ip有一项或者多项为空";
@@ -384,7 +392,7 @@ public class GetResults {
             return i;
         }
         try {
-            results = abPacketLossProblem(interfaceName1, pe1, vrf1, peWan1, interfaceName2, pe2, vrf2, peWan2);
+            results = abPacketLossProblem(interfaceName1, pe1, vrf1, peWan1, interfaceName2, pe2, vrf2, peWan2,paramMap.get("destIP"));
             if (results.length() < 100) {
                 if (connTotal == 4) {
                     results = "GGWAPI cannot connect" +
@@ -456,10 +464,21 @@ public class GetResults {
             caseView.setDestinationIp(tempMap.get("DESTINATION_IP").toString());
             caseView.setSourceIp(tempMap.get("SOURCE_IP").toString());
             caseView.setTrunkName(tempMap.get("Trunk_Name").toString());
+//            caseView.setPrvoisioningPartner(StrUtil.isBlank(tempMap.get("PRVOISIONING_PARTNER").toString())?"":tempMap.get("PRVOISIONING_PARTNER").toString());
+            caseView.setPrvoisioningPartner("");
             System.out.println(JSONUtil.toJsonStr(caseView));
+            HashMap<String, String> items = new HashMap<>();
+            items.put("Internet Unreachable 互联网不能互访本地或外地网络","Internet Unreachable 互联网不能互访本地或外地网络");
+            items.put("Intranet Unreachable 公司内部网不能互访","Intranet Unreachable 公司内部网不能互访");
+            items.put("Other  其它","Other  其它");
+            items.put("Routing issue/Config issue 路由问题/配置问题","Routing issue/Config issue 路由问题/配置问题");
+            items.put("Inquiry RFO/Historical log 查询平台/系统/历史告警/原因","Inquiry RFO/Historical log 查询平台/系统/历史告警/原因");
+            items.put("Circuit/Service latency / Packet loss / Unstable 线路/服务延迟/ 丢包/ 不稳定","Circuit/Service latency / Packet loss / Unstable 线路/服务延迟/ 丢包/ 不稳定");
+            items.put("Circuit/Service down (Current) 线路/服务中断","Circuit/Service down (Current) 线路/服务中断");
+
             if (caseView.getWebType().indexOf("Core Network") > -1) {//骨干类型
                 trunkList.add(caseView);
-            } else if (caseView.getWebItem().indexOf("Packet loss") > -1) {//丢包
+            } else if (!StrUtil.isBlank(items.get(caseView.getWebItem()))) {//丢包等类型
                 if (onlyOneMap.containsKey(caseView.getCaseId())) {//如果有多条A-B丢包,再根据是否存在dstIp 区分(site2site Packet loss)(site-dst Packet loss)
                     ArrayList<CaseView> tempList = new ArrayList<>();
                     tempList.add(onlyOneMap.get(caseView.getCaseId()));
@@ -469,9 +488,11 @@ public class GetResults {
                 } else {//一条 然后再根据是否存在dstIp 区分(Local packet loss)()
                     onlyOneMap.put(caseView.getCaseId(), caseView);
                 }
-            } else if (caseView.getWebItem().indexOf("Service down") > -1) {//闪断类型
+            }
+            /*else if (caseView.getWebItem().indexOf("Service down") > -1) {//闪断类型
                 flappingList.add(caseView);
-            }else if(!StrUtil.isBlank(caseView.getWebItem())&&!StrUtil.isBlank(caseView.getWebType())){
+            }*/
+            else if(!StrUtil.isBlank(caseView.getWebItem())&&!StrUtil.isBlank(caseView.getWebType())){
                 otherList.add(caseView);
             }
         }
@@ -483,15 +504,7 @@ public class GetResults {
             ThreadUtil.sleep(2000);
         }
 
-        for (int i = 0; i < flappingList.size(); i++) {//闪断类型
-            CaseView caseView = flappingList.get(i);
-            FlappingManage flappingManage = new FlappingManage(caseView);
-            flappingManage.start();
-            ThreadUtil.sleep(2000);
-
-        }
-
-        for (String caseId : onlyOneMap.keySet()) {//单线丢包/单线丢包对端监测
+        for (String caseId : onlyOneMap.keySet()) {//单线丢包/单线丢包对端监测/路由问题配置问题/Inquiry RFO Historical log/互联网不能互访本地或外地网络
             CaseView caseView = onlyOneMap.get(caseId);
             OnlyOneSiteManage onlyOneSiteManage = new OnlyOneSiteManage(caseView);
             onlyOneSiteManage.start();
@@ -500,7 +513,7 @@ public class GetResults {
 
         }
 
-        for (String caseId : repeatMap.keySet()) {//a-b丢包
+        for (String caseId : repeatMap.keySet()) {//a-b丢包/互联网不能互访本地或外地网络/公司内部网不能互访
             ArrayList<CaseView> caseViews = repeatMap.get(caseId);
             ABSiteManage abSiteManage = new ABSiteManage(caseViews);
             abSiteManage.start();
@@ -515,7 +528,6 @@ public class GetResults {
         }
         caseIdLog.info("repeatMap:" + JSONUtil.toJsonStr(repeatMap));
         caseIdLog.info("onlyOneMap:" + JSONUtil.toJsonStr(onlyOneMap));
-        caseIdLog.info("flappingList:" + JSONUtil.toJsonStr(flappingList));
         caseIdLog.info("trunkList" + JSONUtil.toJsonStr(trunkList));
         caseIdLog.info("otherList" + JSONUtil.toJsonStr(otherList));
 
@@ -1122,7 +1134,10 @@ public class GetResults {
                 return summary;
             }
         }
+
+
     }
+
 
 
     public static void main(String[] args) {

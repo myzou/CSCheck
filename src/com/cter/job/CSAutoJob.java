@@ -16,7 +16,7 @@ public class CSAutoJob {
 
     public void csAutoCheck(){
         log.info(CSAutoJob.queryNum+"============ 开始查询 =========");
-//        GetResults.getAllCaseByView();
+        GetResults.getAllCaseByView();
         log.info(CSAutoJob.queryNum+"============ 结束查询 =========");
         CSAutoJob.queryNum=queryNum+1;
     }

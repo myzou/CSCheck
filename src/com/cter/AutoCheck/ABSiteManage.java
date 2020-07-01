@@ -1,6 +1,7 @@
 package com.cter.AutoCheck;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.cter.util.BaseLog;
 
 import java.util.ArrayList;
@@ -46,8 +47,29 @@ public class ABSiteManage extends  Thread{
             paramMap.put("pe2", pe2);
             paramMap.put("vrf2", vrf2);
             paramMap.put("peWan2", pewan2);
+            paramMap.put("dst_ip",caseViews.get(0).getDestinationIp());
             System.out.print(DateUtil.now() +"\t");
-            log.info(DateUtil.now() +"\t"+"case:"+caseId+"\ttype:ab丢包"+"\t"+ GetResults.abPacketLossDispose(paramMap,caseId,connTotal));
+            GetResults.insertCaseLog(caseViews.get(0));
+            GetResults.insertCaseLog(caseViews.get(1));
+
+            if(caseViews.get(1).getSiteId().equals(caseViews.get(0).getSiteId())){
+                paramMap.put("interfaceName", interfaceName1);
+                paramMap.put("pe", pe1);
+                paramMap.put("vrf", vrf1);
+                paramMap.put("peWanIp",pewan1);
+                paramMap.put("prvoisioning_partner",caseViews.get(0).getPrvoisioningPartner().trim());
+                paramMap.put("site_id",caseViews.get(0).getSiteId());
+                if(StrUtil.isBlank(caseViews.get(0).getDestinationIp())&&caseViews.get(0).getDestinationIp().length()<6){//没有对端ip
+                    log.info(DateUtil.now() +"\t"+"case:"+caseViews.get(0).getCaseId()+"\ttype:"+caseViews.get(0).getWebItem()+"\t"+ GetResults.packetLossDispose(paramMap,caseId,connTotal));
+                }
+                if(!StrUtil.isBlank(caseViews.get(0).getDestinationIp())&&caseViews.get(0).getDestinationIp().length()>6){//有对端ip
+                    log.info(DateUtil.now() +"\t"+"case:"+caseViews.get(0).getCaseId()+"\ttype:"+caseViews.get(0).getWebItem()+"\t"+ GetResults.internetDispose(paramMap,caseId,connTotal));
+                }
+            }else {
+
+                log.info(DateUtil.now() +"\t"+"case:"+caseId+"\ttype:ab丢包"+"\t"+ GetResults.abPacketLossDispose(paramMap,caseId,connTotal));
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

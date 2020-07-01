@@ -36,20 +36,21 @@ public class OnlyOneSiteManage extends  Thread{
             String vrf = caseView.getVrf();
             String peWanIp = caseView.getPeWanIp();
             String ceWanIp = caseView.getCeWanIp();
-
-            String dstIP = caseView.getDestinationIp();
+            String webitem=caseView.getWebItem();
             paramMap.put("interfaceName", interfaceName);
             paramMap.put("pe", pe);
             paramMap.put("vrf", vrf);
             paramMap.put("peWanIp",peWanIp);
-            paramMap.put("ceWanIp",ceWanIp);
-            paramMap.put("dstIP",dstIP);
+            paramMap.put("prvoisioning_partner",caseView.getPrvoisioningPartner().trim());
+            paramMap.put("site_id",caseView.getSiteId());
+            paramMap.put("dst_ip",caseView.getDestinationIp());
+
+            GetResults.insertCaseLog(caseView);
             if(StrUtil.isBlank(caseView.getDestinationIp())&&caseView.getDestinationIp().length()<6){//没有对端ip
-                log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:单线丢包"+"\t"+ GetResults.packetLossDispose(paramMap,caseId,connTotal));
-            }else{//有对端ip
-                //CIA ISP =INTERNET
-                //TCP TCE==VPN
-                log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:单线丢包 有对端线路 互联网"+"\t"+ GetResults.packetLossDestinationDispose(paramMap,caseId,connTotal));
+                log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:"+caseView.getWebItem()+"\t"+ GetResults.packetLossDispose(paramMap,caseId,connTotal));
+            }
+            if(!StrUtil.isBlank(caseView.getDestinationIp())&&caseView.getDestinationIp().length()>6){//有对端ip
+                log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:"+caseView.getWebItem()+"\t"+ GetResults.internetDispose(paramMap,caseId,connTotal));
             }
 
         } catch (Exception e) {

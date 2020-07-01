@@ -29,9 +29,11 @@ public class ClearOtherManage extends Thread {
             String caseId=caseView.getCaseId();
             Connection conn = OracleDbUtil.getRemedyProConnection();
             String results="Work Log";
+            GetResults.insertCaseLog(caseView);
             int i = GetResults.insertWorkLog(results, caseId, conn);
             OracleDbUtil.closeConnection(conn);
             GetResults.caseIdMap.remove(caseId);
+
             log.info(  "case:"+caseView.getCaseId()+"\ttype:其他类型 \t"+ i );
 
         } catch (Exception e) {

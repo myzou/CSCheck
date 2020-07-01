@@ -27,6 +27,8 @@ public class TrunkManage extends Thread {
             int connTotal=1;
             String caseId=caseView.getCaseId();
             String trunkName=caseView.getTrunkName();
+            GetResults.insertCaseLog(caseView);
+
             log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:骨干 \t"+ GetResults.trunkDispose(trunkName,caseId,connTotal));
 
         } catch (Exception e) {
