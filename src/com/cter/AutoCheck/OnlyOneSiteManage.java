@@ -40,13 +40,13 @@ public class OnlyOneSiteManage extends  Thread{
             paramMap.put("interfaceName", interfaceName);
             paramMap.put("pe", pe);
             paramMap.put("vrf", vrf);
-            paramMap.put("peWanIp",peWanIp);
+            paramMap.put("pe_wan_ip",peWanIp);
             paramMap.put("prvoisioning_partner",caseView.getPrvoisioningPartner().trim());
             paramMap.put("site_id",caseView.getSiteId());
             paramMap.put("dst_ip",caseView.getDestinationIp());
 
             GetResults.insertCaseLog(caseView);
-            if(StrUtil.isBlank(caseView.getDestinationIp())&&caseView.getDestinationIp().length()<6){//没有对端ip
+            if(StrUtil.isBlank(caseView.getDestinationIp())||caseView.getDestinationIp().length()<6){//没有对端ip
                 log.info(DateUtil.now() +"\t"+"case:"+caseView.getCaseId()+"\ttype:"+caseView.getWebItem()+"\t"+ GetResults.packetLossDispose(paramMap,caseId,connTotal));
             }
             if(!StrUtil.isBlank(caseView.getDestinationIp())&&caseView.getDestinationIp().length()>6){//有对端ip
