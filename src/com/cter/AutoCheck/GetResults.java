@@ -522,7 +522,13 @@ public class GetResults {
             if (caseView.getWebType().indexOf("Core Network") > -1) {//骨干类型
                 trunkList.add(caseView);
             } else if (!StrUtil.isBlank(caseView.getPeName())&&!StrUtil.isBlank(caseView.getInterfaceName())) {//丢包等类型
-                if (onlyOneMap.containsKey(caseView.getCaseId())) {//如果有多条A-B丢包,再根据是否存在dstIp 区分(site2site Packet loss)(site-dst Packet loss)
+                boolean site_Id_12_contrast=false;
+                try {
+                    site_Id_12_contrast= onlyOneMap.get(caseView.getCaseId()).getSiteId().equals(caseView.getSiteId());//site1 site2 对比
+                } catch (Exception e) {
+
+                }
+                if (onlyOneMap.containsKey(caseView.getCaseId())&&!site_Id_12_contrast) {//如果有多条A-B丢包,再根据是否存在dstIp 区分(site2site Packet loss)(site-dst Packet loss)
                     ArrayList<CaseView> tempList = new ArrayList<>();
                     tempList.add(onlyOneMap.get(caseView.getCaseId()));
                     tempList.add(caseView);
